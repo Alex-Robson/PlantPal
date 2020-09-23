@@ -1,5 +1,7 @@
 # data - can be populated using the scraping notebook
 ./scraping/simple_images/
+
+# images
 *.jpeg
 *.gif
 *.png
