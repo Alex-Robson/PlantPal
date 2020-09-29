@@ -1,11 +1,10 @@
 # data - can be populated using the scraping notebook
-./scraping/simple_images/
-./Proof_of_concept/flower_photos/
-
-# images
 *.jpeg
 *.gif
 *.png
 *.png
 *.jpeg
 *.png
+
+# saved models
+./models/*
