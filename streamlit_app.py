@@ -76,7 +76,7 @@ def create_model():
     return model
 
 def load_plant_df():
-    plants_df = pd.read_csv('../data/house_plants.csv', skiprows=2,
+    plants_df = pd.read_csv('./data/house_plants.csv', skiprows=2,
                             names=['name', 'type', 'latin_name',
                                    'name_1', 'name_2', 'name_3',
                                    'water_lmh', 'water_desc',
@@ -143,7 +143,7 @@ def plant_col(plant, im, col):
 # preload model and information
 plants_df = load_plant_df()
 model = create_model()
-model.load_weights('../models/convmod_1.0_weights.h5')
+model.load_weights('./models/convmod_1.0_weights.h5')
 
 uploaded_files = []
 
