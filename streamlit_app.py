@@ -19,7 +19,7 @@ def get_static_store():
 
 # suppress warning
 st.set_option('deprecation.showfileUploaderEncoding', False)
-st.beta_set_page_config(page_title=None, page_icon=':seedling:', layout='wide', initial_sidebar_state='auto')
+st.beta_set_page_config(page_title='PlantPal', page_icon=':seedling:', layout='wide', initial_sidebar_state='auto')
 
 # set parameters
 img_height = 240
@@ -115,7 +115,7 @@ def print_info(plant, im):
 
 def plant_col(plant, im, col):
     # print image
-    col.image(im)
+    col.image(im, use_column_width=True)
 
     # print plant info
     plant_df = plants_df[plants_df['name'] == plant]

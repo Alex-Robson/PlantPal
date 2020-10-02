@@ -2,13 +2,13 @@
 Common Name,Flowering / Foliage,Scientific name,Other names 1,Other names 2,Other names 3,Water,How Often,Light,Common issues,Fertilizer needs,Cat toxicity,cat_tox_desc,Dog toxicity,Dog_tox_desc,
 Aloe Vera,Cactus / Succulent,Aloe barbadensis miller,,,,Low,Water deeply once every 7 days.,Bright and indirect,,,Mild,"Vomiting, diarrhoea, lethargy, depression, anorexia, tremors, change in urine colour",Mild ,"Vomiting, diarrhoea, lethargy, depression, anorexia, tremors, change in urine colour",
 Aluminum Plant,Foliage,Pilea cadierei,,,,"High
-",Water every two days keeping top 1/4 of soil moist. Mist every other day.,Summer - Partial Shade; Winter - Full Light,"Sensitive to hot or cold drafts
+",Water every two days keeping top 1/4 of soil moist. Mist every other day.,Summer - Partial Shade\n Winter - Full Light,"Sensitive to hot or cold drafts
 This plant needs 4 hours of soft light a day but no more or leaves will burn",,Non-toxic,,Non-toxic,,
 Asparagus Fern,,Asparagus aethiopicus,asparagus grass,Foxtail fern,,"High
 ","
 Water plant every two days keeping top two inches of soil moist.
-Mist daily.",Partial to Full Shade,,,Non-toxic,,Non-toxic,,
-Baby Rubber Plant,Cactus / Succulent,Peperomia obtusifolia,American rubber plant,Pepper face plant,,Low,Water once every 6 days.,Partial Shade and medium indirectd light,,,Mild,"Nausea, vomiting, depression, lack of coordination",Mild ,"Nausea, vomiting, depression, lack of coordination",
+Mist daily.",Partial sun to full shade,,,Non-toxic,,Non-toxic,,
+Baby Rubber Plant,Cactus / Succulent,Peperomia obtusifolia,American rubber plant,Pepper face plant,,Low,Water once every 6 days.,Partial shade to medium indirect light,,,Mild,"Nausea, vomiting, depression, lack of coordination",Mild ,"Nausea, vomiting, depression, lack of coordination",
 Boston Fern,Foliage,Nephrolepis exaltata,,,,"High
 ","Water every three days.
 Mist every other day. ",Bright Indirect Light,,,Non-toxic,,Non-toxic,,
@@ -28,10 +28,9 @@ Peace Lily,Flower,Spathiphyllum,White sails,Spathe flower,,Medium,Water every 3 
 Pothos,,Epipremnum aureum,,,,Low,Water once every 7 days. Soil should be dry between waterings.,Bright Indirect Light,,,Moderate,"Vomiting, oral irritation and difficulty swallowing",Moderate,"Vomiting, oral irritation and difficulty swallowing",
 Rubber Plant,Foliage,Ficus elastica,Rubber bush ,Rubber tree,,Medium,"Summer - water every three days
 Winter - water once per week",Bright Indirect Light,scorched leaves from direct light or hot sunbeams.,,Mild,"Contact dermatitis from sap, nausea and vomiting from consumption",Mild,"Contact dermatitis from sap, nausea and vomiting from consumption",
-Snake Plant,,Sansevieria trifasciata,,Mother in law's tongue,,Very Low,Water every 7-10 days. Soil should be dry between waterings.,"Partial Shade
-Partial light",,,Mild,"Nausea, vomiting, and diarrhea.",Mild,"Nausea, vomiting, and diarrhea.",
+Snake Plant,,Sansevieria trifasciata,,Mother in law's tongue,,Very Low,Water every 7-10 days. Soil should be dry between waterings.,Partial shade,,,Mild,"Nausea, vomiting, and diarrhea.",Mild,"Nausea, vomiting, and diarrhea.",
 Spider Plant,Foliage,Chlorophytum comosum,,,,Medium,Water once every 4-5 days,Moderate indirect sunlight.,scorched leaves from direct light or hot sunbeams.,,Non-toxic,,Non-toxic,,mildly hallucinagenic to cats
 Monstera,,Swiss-cheese plant,Split-leaf Philodendron,,,Medium,"Water once every 5 days. Keep top two inches of soil moist.
-Mist every day.",Moderate indirect sunlight.,,,,,,,Has air-purifying qualities
+Mist every day.",Moderate indirect sunlight.,,,Mild,"Oral irritation, pain and swelling of mouth, excess drooling, vomiting, and difficulty swallowing",Mild,"Oral irritation, pain and swelling of mouth, excess drooling, vomiting, and difficulty swallowing",Has air-purifying qualities
 Umbrella Tree,Foliage,Schefflera arboricola,Umbrella Plant,Queensland Umbrella Tree,Octupus Tree,Very Low,Water once every 7 days. Soil should be dry between waterings.,Moderate indirect sunlight.,"Prone to fungal leaf spots.
 Prone to root rot.",,Mild,mild vomiting and diarrhea,Mild,mild vomiting and diarrhea,
