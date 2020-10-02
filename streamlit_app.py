@@ -5,7 +5,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 
 import PIL
-import cv2
+import opencv as cv2
 
 import pandas as pd
 import numpy as np
