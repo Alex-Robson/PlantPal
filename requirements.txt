@@ -56,13 +56,13 @@ oauthlib==3.1.0
 olefile==0.46
 opt-einsum==3.3.0
 packaging==20.4
-pandas @ file:///Users/runner/miniforge3/conda-bld/pandas_1599601086269/work
+pandas==1.1.2
 pandocfilters==1.4.2
 parso==0.7.1
 pathtools==0.1.2
 pexpect==4.8.0
 pickleshare==0.7.5
-Pillow @ file:///Users/runner/miniforge3/conda-bld/pillow_1594212124634/work
+Pillow==7.2.0
 prometheus-client==0.8.0
 prompt-toolkit==3.0.7
 protobuf==3.13.0
@@ -83,7 +83,7 @@ requests-oauthlib==1.3.0
 rsa==4.6
 s3transfer==0.3.3
 Send2Trash==1.5.0
-six @ file:///home/conda/feedstock_root/build_artifacts/six_1590081179328/work
+six==1.15.0
 streamlit-nightly==0.67.2.dev20200930
 tensorboard==2.3.0
 tensorboard-plugin-wit==1.7.0
