@@ -5,7 +5,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 
 import PIL
-import opencv as cv2
+# import opencv as cv2
 
 import pandas as pd
 import numpy as np
@@ -38,12 +38,12 @@ st.write("""
          """
          )
 
-def cv2_imread(path, label):
-    # read in the image, getting the string of the path via eager execution
-    img = cv2.imread(path.numpy().decode('utf-8'), cv2.IMREAD_UNCHANGED)
-    # change from BGR to RGB
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    return img, label
+# def cv2_imread(path, label):
+#     # read in the image, getting the string of the path via eager execution
+#     img = cv2.imread(path.numpy().decode('utf-8'), cv2.IMREAD_UNCHANGED)
+#     # change from BGR to RGB
+#     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+#     return img, label
 
 def predict_image(im):
     resized_im = im #.resize((240, 240))
