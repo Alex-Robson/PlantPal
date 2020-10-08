@@ -5,7 +5,6 @@ from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 
 import PIL
-from bokeh.models.widgets import Div
 
 import pandas as pd
 import numpy as np
