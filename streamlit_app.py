@@ -34,7 +34,7 @@ class_names = ['Aloe_Vera', 'Asparagus_Fern', 'Baby_Rubber_Plant', 'Boston_Fern'
             'Snake_Plant', 'Spider_Plant', 'Umbrella_Tree']
 
 # Header
-logo = PIL.Image.open('./data/streamlit/ar1.png')
+logo = PIL.Image.open('./data/streamlit/Logo.png')
 # st.markdown('![logo](./data/streamlit/ar1.png)')
 st.image(logo, width=700, output_format='png') # logo
 
