@@ -205,7 +205,7 @@ st.sidebar.write('## Sample Images:')
 
 for file in glob.glob('./data/streamlit/sample_imgs/*'):
     sample_img = PIL.Image.open(file)
-    sample_img = sample_img.resize((150,200))
+    sample_img = sample_img.resize((300,370))
     st.sidebar.image(sample_img)
 
 # SELECTING FROM LIST
