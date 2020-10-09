@@ -10,6 +10,9 @@ import pandas as pd
 import numpy as np
 from typing import Dict
 
+# define layout
+st.beta_set_page_config(page_title='PlantPal', page_icon=':seedling:', layout='centered', initial_sidebar_state='expanded')
+
 # initialize uploaded file dictionary
 @st.cache(allow_output_mutation=True)
 def get_static_store():
@@ -19,10 +22,7 @@ def get_static_store():
 # suppress warning
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
-# define layout
-st.beta_set_page_config(page_title='PlantPal', page_icon=':seedling:', layout='centered', initial_sidebar_state='expanded')
-
-# set parameters
+# set NN parameters
 img_height = 240
 img_width = 240
 no_classes = 16
@@ -35,17 +35,10 @@ class_names = ['Aloe_Vera', 'Asparagus_Fern', 'Baby_Rubber_Plant', 'Boston_Fern'
 
 # Header
 logo = PIL.Image.open('./data/streamlit/Logo.png')
-# st.markdown('![logo](./data/streamlit/ar1.png)')
-st.image(logo, width=700, output_format='png') # logo
-
-
-# st.markdown(f"<h1 style='text-align: center; color: black;'>PlantPal</h1>", unsafe_allow_html=True)
-# st.markdown(f"<h1 style='text-align: center; color: black;'>For happy plants and healthy pets</h1>", unsafe_allow_html=True)
-# st.markdown(f"<font size=30><h1 style='text-align: center; color: black;'>PlantPal</h1></font>", unsafe_allow_html=True)
-# st.write("""# PlantPal """ ) # page title
+st.image(logo, width=700, output_format='PNG') # logo
 
 def predict_image(im):
-    resized_im = im #.resize((240, 240))
+    resized_im = im
     try:
         np_im = np.array(resized_im)
         np_im = np_im[None, :]
@@ -54,8 +47,76 @@ def predict_image(im):
     except ValueError:
         st.error('It appears your image isn\'t of the right format, Please input a valid image')
 
-    st.write(f'{np.sum(result)}')
     return class_names[index_best]
+
+def predict_top5(im):
+    resized_im = im
+    top5_plants = []
+    top5_probs = []
+    try:
+        np_im = np.array(resized_im)
+        np_im = np_im[None, :]
+        result = model.predict(np_im)
+        top5_indxs = np.argpartition(result, -5)[0][-5:]
+        top5_indxs = top5_indxs[::-1]
+        for indx in top5_indxs:
+            top5_plants.append(class_names[indx])
+            top5_probs.append(result[0][indx])
+    except ValueError:
+        st.error('It appears your image isn\'t of the right format, Please input a valid image')
+    return top5_plants, top5_probs
+
+def get_top5_confirmation(top5_plants, top5_probs):
+
+    top5_plants_spaced = [s.replace('_', ' ') for s in top5_plants] # replace _ with a space
+    top5_df = plants_df[plants_df['name'].isin(top5_plants_spaced)] # isolate relevant plant data
+
+    # append softmax values to dataframe
+    top5_df['softmax'] = 0
+    for i in np.arange(5):
+        top5_df.loc[top5_df['name'] == top5_plants_spaced[i], ['softmax']] = top5_probs[i]
+
+    top5_df.sort_values(by='softmax', ascending=False, inplace=True)
+    top5_df.reset_index(inplace=True, drop=True)
+
+    confirmed_indx = display_5_pick_1(top5_df)
+    confirmed_plant = top5_df['name'].iloc[confirmed_indx]
+
+    print_info(confirmed_plant, im)
+
+def find_key_true(input_dict):
+    return next((k for k, v in input_dict.items() if v == True), None)
+
+def display_5_pick_1(top5_df):
+
+    button_dict = {0: False,
+                   1: False,
+                   2: False,
+                   3: False,
+                   4: False}
+
+    while all(value == False for value in button_dict.values()) == True:
+
+        st.write('## These are the 5 most likely plants, select the one ')
+
+        columns = st.beta_columns(5)
+
+        for i, col in enumerate(columns):
+
+            # get softmax
+            plant_softmax = top5_df.iloc[i]['softmax']
+            softmax_neat = '{:4.4} %'.format(plant_softmax * 100)
+
+            # display token image
+            token_img = PIL.Image.open(f'./data/streamlit/class_imgs/{top5_df.iloc[i].img_file}')
+            token_img = token_img.resize((400,500)) # make image sizes uniform
+            col.image(token_img, width=140, output_format='PNG', caption=softmax_neat)  # logo
+
+            # get name
+            plant_name = top5_df.iloc[i]['name']
+            button_dict[i] = col.button(f'{plant_name}')
+
+    return find_key_true(button_dict)
 
 def create_model():
 
@@ -77,14 +138,7 @@ def create_model():
     return model
 
 def load_plant_df():
-    plants_df = pd.read_csv('./data/house_plants.csv', skiprows=2,
-                            names=['name', 'type', 'latin_name',
-                                   'name_1', 'name_2', 'name_3',
-                                   'water_lmh', 'water_desc',
-                                   'light', 'issues', 'fert',
-                                   'cat_tox', 'cat_tox_desc',
-                                   'dog_tox', 'dog_tox_desc',
-                                   'fun_fact'])
+    plants_df = pd.read_csv('./data/streamlit/house_plants_16c.csv')
     return plants_df
 
 def print_info(plant, im):
@@ -97,10 +151,13 @@ def print_info(plant, im):
 
     # latin name hyperlink
     latin_name = plant_df['latin_name'].values[0]
-    wiki_url = 'www.wikipedia.org'#plant_df['wikilink'].values[0]
-    link = f'[{padded_latin_name}]({wiki_url})'
-    st.markdown(link, unsafe_allow_html=True)
-    # st.markdown("<h1 style='text-align: center; color: red;'>Some title</h1>", unsafe_allow_html=True)
+    wiki_url = plant_df['link'].values[0]
+
+    # centered
+    st.markdown(
+        f"<a style='display: block; text-align: center;' href={wiki_url}>{latin_name}</a>",
+        unsafe_allow_html=True,
+    )
 
     st.markdown('---')
 
@@ -136,8 +193,8 @@ search_option = st.sidebar.selectbox(
 
 st.sidebar.write('## Sample Images:')
 
-img = PIL.Image.open('./data/streamlit/download.jpeg')
-st.sidebar.image(img)
+# img = PIL.Image.open('./data/streamlit/download.jpeg')
+# st.sidebar.image(img)
 
 #######################
 
@@ -175,6 +232,10 @@ elif search_option == 'upload an image':
         st.info("Please upload at least one image of a house plant")
 
     if uploaded_file:
-        if len(uploaded_files) == 1:
-            name = predict_image(uploaded_files_resized[0])
-            print_info(name.replace('_', ' '), uploaded_files[0])
+        # if len(uploaded_files) == 1:
+        #
+        top5_plants, top5_probs = predict_top5(uploaded_files_resized[0])
+        get_top5_confirmation(top5_plants, top5_probs)
+
+        # name = predict_image(uploaded_files_resized[0])
+        # print_info(name.replace('_', ' '), uploaded_files[0])
