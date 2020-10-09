@@ -247,7 +247,7 @@ elif search_option == 'upload an image':
 
         # If very confident
         if max(top5_probs) > 0.95:
-            plant = top5_plants(np.argmax(top5_probs))
+            plant = top5_plants[np.argmax(top5_probs)]
             print_info(plant.replace('_', ' '), im)
 
         # If partially confident
@@ -257,5 +257,3 @@ elif search_option == 'upload an image':
         # If very uncertain
         else:
             st.write('## Unfortunately there is a high uncertainty with your image - consider taking another')
-
-        # get_top5_confirmation(top5_plants, top5_probs)
