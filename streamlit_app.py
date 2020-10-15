@@ -134,7 +134,7 @@ def display_5_pick_1(top5_df):
     # #         return find_key_true(button_dict)
     # #     pass # wait until this isn't true
 
-# @st.cache
+@st.cache(allow_output_mutation=True)
 def create_model():
     local_model_file = './models/InceptionV3_20_100e_GSP1.0_nopp_model.h5'
     if not os.path.isfile(local_model_file):
