@@ -1,3 +1,6 @@
+import os
+import urllib
+
 import streamlit as st
 
 import tensorflow as tf
@@ -131,9 +134,24 @@ def display_5_pick_1(top5_df):
     # #         return find_key_true(button_dict)
     # #     pass # wait until this isn't true
 
+# @st.cache
 def create_model():
-    model = tf.keras.models.load_model(f'./models/InceptionV3_20_100e_GSP1.0_nopp_model.h5')
-    model.load_weights(f'./models/InceptionV3_20_100e_GSP1.0_nopp_weights.h5')
+    local_model_file = './models/InceptionV3_20_100e_GSP1.0_nopp_model.h5'
+    if not os.path.isfile(local_model_file):
+        remote_model_url = 'https://plantnet.s3-us-west-1.amazonaws.com/InceptionV3_20_100e_GSP1.0_nopp_model.h5'
+        print(f'Downloading model from {remote_model_url}')
+        local_model_file, _ = urllib.request.urlretrieve(remote_model_url)
+    print(f'Reading from model file: {local_model_file}')
+    model = tf.keras.models.load_model(local_model_file)
+
+    local_weights_file = './models/InceptionV3_20_100e_GSP1.0_nopp_weights.h5'
+    if not os.path.isfile(local_weights_file):
+        remote_weights_url = 'https://plantnet.s3-us-west-1.amazonaws.com/InceptionV3_20_100e_GSP1.0_nopp_weights.h5'
+        print(f'Download weights from {remote_weights_url}')
+        local_weights_file, _ = urllib.request.urlretrieve(remote_weights_url)
+    print(f'Loading weights from {local_weights_file}')
+    model.load_weights(local_weights_file)
+
     return model
 
 def print_info(plant, im):
@@ -171,8 +189,12 @@ def print_info(plant, im):
     if plant_df['dog_tox'].values[0] != 'Non-toxic':
         st.write('     {}'.format(plant_df['dog_tox_desc'].values[0]))
 
+
+@st.cache
+def get_plants_df():
+    return pd.read_csv('./data/streamlit/house_plants_15c.csv')
 # preload model and information
-plants_df = pd.read_csv('./data/streamlit/house_plants_15c.csv') # plants info
+plants_df =  get_plants_df() # plants info
 model = create_model() # model architecture
 # model.load_weights('./models/convmod_1.0_weights.h5') # weights
 
