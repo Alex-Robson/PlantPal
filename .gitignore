@@ -5,6 +5,7 @@
 *.png
 *.jpeg
 *.png
+./data/old
 
 # saved models
 ./models/*

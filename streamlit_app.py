@@ -3,6 +3,7 @@ import streamlit as st
 import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 import glob
 import PIL
@@ -17,28 +18,26 @@ st.beta_set_page_config(page_title='PlantPal', page_icon=':seedling:', layout='c
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
 # set NN parameters
-img_height = 240
-img_width = 240
+img_height = 224
+img_width = 224
 no_classes = 16
 
 # define classes
-class_names = ['Aloe_Vera', 'Asparagus_Fern', 'Baby_Rubber_Plant', 'Boston_Fern',
-            'Fiddle_Leaf_Fig', 'Golden_Pothos', 'Jade_Plant', 'Maidenhair_Fern',
-            'Monstera', 'Parlor_Palm', 'Peace_Lily', 'Pothos', 'Rubber_Plant',
-            'Snake_Plant', 'Spider_Plant', 'Umbrella_Tree']
+class_names = ['Aloe_Vera', 'Asparagus_Fern', 'Baby_Rubber_Plant', 'Boston_Fern', 'Easter_Lily',
+           'Fiddle_Leaf_Fig', 'Jade_Plant', 'Monstera','Parlor_Palm', 'Peace_Lily', 'Pothos',
+           'Rubber_Plant', 'Snake_Plant', 'Spider_Plant', 'Umbrella_Tree']
 
 # Header
 logo = PIL.Image.open('./data/streamlit/Logo.png')
 st.image(logo, width=700, output_format='PNG') # logo
 
 def predict_top5(im):
-    resized_im = im
     top5_plants = []
     top5_probs = []
     try:
-        np_im = np.array(resized_im)
-        np_im = np_im[None, :]
-        result = model.predict(np_im)
+        sample_datagen = ImageDataGenerator(preprocessing_function=tf.keras.applications.xception.preprocess_input)
+        sample_batch = sample_datagen.flow(im, batch_size=1)
+        result = model.predict(sample_batch)
         top5_indxs = np.argpartition(result, -5)[0][-5:]
         top5_indxs = top5_indxs[::-1]
         for indx in top5_indxs:
@@ -62,8 +61,6 @@ def get_top5_confirmation(top5_plants, top5_probs):
     top5_df.reset_index(inplace=True, drop=True)
 
     confirmed_plant = display_5_pick_1(top5_df)
-    # confirmed_indx = display_5_pick_1(top5_df)
-    # confirmed_plant = top5_df['name'].iloc[confirmed_indx]
 
     print_info(confirmed_plant, im)
 
@@ -79,13 +76,11 @@ def display_5_pick_1(top5_df):
                    3: False,
                    4: False}
 
-    # while (all(value == False for value in button_dict.values()) == True) and :
-
     st.write('These are the 5 most likely plants, select the one: \n')
 
     columns = st.beta_columns(5)
-    letters = ['A)', 'B)', 'C)', 'D)', 'E)']
     plant_names = []
+    st.text("") # add whitespace
 
     for i, col in enumerate(columns):
 
@@ -96,16 +91,16 @@ def display_5_pick_1(top5_df):
         # get name
         plant_name = top5_df.iloc[i]['name']
         plant_names.append(plant_name)
-        col.write(plant_name) # label
 
         # display token image
         token_img = PIL.Image.open(f'./data/streamlit/class_imgs/{top5_df.iloc[i].img_file}')
         token_img = token_img.resize((400,500)) # make image sizes uniform
         col.image(token_img, width=140, output_format='PNG', caption=softmax_neat)  # logo
 
-        # # get name
-        # plant_name = top5_df.iloc[i]['name']
-        # button_dict[i] = col.button(f'{plant_name}')
+        col.markdown(
+            f"""<a style='display: block; text-align: center;'>{plant_name}</a>""",
+            unsafe_allow_html=True,
+        )
 
     options4dropdown = plant_names + ['None of the above']
     search_option = st.selectbox('Select the plant that resembles yours or select none of the above',
@@ -137,22 +132,8 @@ def display_5_pick_1(top5_df):
     # #     pass # wait until this isn't true
 
 def create_model():
-
-    model = Sequential([
-        layers.experimental.preprocessing.Rescaling(1. / 255, input_shape=(img_height, img_width, 3)),
-        layers.Conv2D(64, 7, activation='relu', padding='same'),
-        layers.MaxPooling2D(2),
-        layers.Conv2D(128, 3, activation='relu', padding='same'),
-        layers.Conv2D(128, 3, activation='relu', padding='same'),
-        layers.MaxPooling2D(2),
-        layers.Conv2D(256, 3, activation='relu', padding='same'),
-        layers.Conv2D(256, 3, activation='relu', padding='same'),
-        layers.MaxPooling2D(2),
-        layers.Flatten(),
-        layers.Dense(128, activation='relu'),
-        layers.Dense(64, activation='relu'),
-        layers.Dense(no_classes, activation='softmax')
-    ])
+    model = tf.keras.models.load_model(f'./models/InceptionV3_20_100e_GSP1.0_nopp_model.h5')
+    model.load_weights(f'./models/InceptionV3_20_100e_GSP1.0_nopp_weights.h5')
     return model
 
 def print_info(plant, im):
@@ -191,9 +172,9 @@ def print_info(plant, im):
         st.write('     {}'.format(plant_df['dog_tox_desc'].values[0]))
 
 # preload model and information
-plants_df = pd.read_csv('./data/streamlit/house_plants_16c.csv') # plants info
+plants_df = pd.read_csv('./data/streamlit/house_plants_15c.csv') # plants info
 model = create_model() # model architecture
-model.load_weights('./models/convmod_1.0_weights.h5') # weights
+# model.load_weights('./models/convmod_1.0_weights.h5') # weights
 
 # SIDEBAR
 # Choose use mode
@@ -232,18 +213,17 @@ elif search_option == 'upload an image':
         # Process you file here
         im = PIL.Image.open(uploaded_file)
         np_im = np.array(im) # full resolution np array
-        im240 = im.resize((240, 240))
-        np_im240 = np.array(im240) # resize for model
+        im224 = im.resize((224, 224))
+        np_im224 = np.array(im224)  # resize for model
+        im_4d = np.expand_dims(np_im224, axis=0)
 
     else:
-        st.info("Please upload at least one image of a house plant or select \"from list\" in the sidebar")
+        st.info("Please upload at least one image of a house plant or select \"from list\" in the sidebar\n"
+                "Images")
 
     if uploaded_file:
 
-        top5_plants, top5_probs = predict_top5(np_im240)
-
-        # If unlikely to be a plant
-        # blah
+        top5_plants, top5_probs = predict_top5(im_4d)
 
         # If very confident
         if max(top5_probs) > 0.95:
