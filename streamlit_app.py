@@ -1,4 +1,3 @@
-import os
 import urllib
 
 import streamlit as st
@@ -137,20 +136,27 @@ def display_5_pick_1(top5_df):
 @st.cache(allow_output_mutation=True)
 def create_model():
     local_model_file = './models/InceptionV3_20_100e_GSP1.0_nopp_model.h5'
-    if not os.path.isfile(local_model_file):
+    try:
+        model = tf.keras.models.load_model(local_model_file)
+    except OSError as e:
+        print(f'Error loading local model file {local_model_file}: {e}')
         remote_model_url = 'https://plantnet.s3-us-west-1.amazonaws.com/InceptionV3_20_100e_GSP1.0_nopp_model.h5'
         print(f'Downloading model from {remote_model_url}')
         local_model_file, _ = urllib.request.urlretrieve(remote_model_url)
-    print(f'Reading from model file: {local_model_file}')
-    model = tf.keras.models.load_model(local_model_file)
+        print(f'Reading from model file: {local_model_file}')
+        model = tf.keras.models.load_model(local_model_file)
 
     local_weights_file = './models/InceptionV3_20_100e_GSP1.0_nopp_weights.h5'
-    if not os.path.isfile(local_weights_file):
+    try:
+        print(f'Loading weights from {local_weights_file}')
+        model.load_weights(local_weights_file)
+    except OSError as e:
+        print(f'Error loading local weights file {local_weights_file}: {e}')
         remote_weights_url = 'https://plantnet.s3-us-west-1.amazonaws.com/InceptionV3_20_100e_GSP1.0_nopp_weights.h5'
         print(f'Download weights from {remote_weights_url}')
         local_weights_file, _ = urllib.request.urlretrieve(remote_weights_url)
-    print(f'Loading weights from {local_weights_file}')
-    model.load_weights(local_weights_file)
+        print(f'Loading weights from {local_weights_file}')
+        model.load_weights(local_weights_file)
 
     return model
 
