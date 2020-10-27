@@ -110,6 +110,7 @@ def display_5_pick_1(top5_df):
 
     return search_option
 
+<<<<<<< Updated upstream
         # if st.button('Submit'):
         #     return search_option
     # else:
@@ -158,6 +159,11 @@ def create_model():
         print(f'Loading weights from {local_weights_file}')
         model.load_weights(local_weights_file)
 
+=======
+def create_model():
+    model = tf.keras.models.load_model(f'./models/InceptionV3_20_100e_GSP1.0_nopp_model.h5')
+    model.load_weights(f'./models/InceptionV3_20_100e_GSP1.0_nopp_weights.h5')
+>>>>>>> Stashed changes
     return model
 
 def print_info(plant, im):
@@ -202,7 +208,6 @@ def get_plants_df():
 # preload model and information
 plants_df =  get_plants_df() # plants info
 model = create_model() # model architecture
-# model.load_weights('./models/convmod_1.0_weights.h5') # weights
 
 # SIDEBAR
 # Choose use mode
