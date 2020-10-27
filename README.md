@@ -6,7 +6,7 @@
 The web app and algorithm are hosted at [PlantPal.org](PlantPal.org)
 
 It should work something similar to this:   
-+<img src="https://github.com/Alex-Robson/PlantPal/blob/master/figures/demo.gif?raw=true" width="200px">
++<img src="https://github.com/Alex-Robson/PlantPal/blob/master/figures/demo.gif?raw=true" width="1200px">
 
 # Bug tracker
 Have a bug? Please create an issue here on GitHub at https://github.com/Alex-Robson/PlantPal/issues.
