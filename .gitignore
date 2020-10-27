@@ -9,3 +9,6 @@
 
 # saved models
 ./models/*
+
+# DS store
+.DS_Store
