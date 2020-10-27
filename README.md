@@ -18,20 +18,29 @@ Requirements can be found in requirements .txt
 They can be installed to your environment with pip:     
      `pip install -r requirements.txt`
     
-# Scraping
+# Notebooks
+## Scraping
 
-Using notebooks 01-04 you can scrape houseplant images from [Google Images](https://www.google.com/search?q=fiddle+leaf+fig&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjO3J6Cj9TsAhXRjp4KHdVdAZ4Q_AUoAnoECDcQBA&biw=1237&bih=786), [Shutterstock](https://www.shutterstock.com/search/fiddle+leaf+fig?image_type=photo), and [Pl@ntNet](https://identify.plantnet.org/reunion/species/Ficus%20lyrata%20Warb./data#) (a database of user submitted images), before automatically removing duplicated
+Using the first four notebooks you can scrape the dataset and remove duplicate images:    
+- [01_scrape_google_images.ipynb](https://github.com/Alex-Robson/PlantPal/blob/master/notebooks/01_scrape_google_images.ipynb) - scrape houseplant images from [Google Images](https://www.google.com/search?q=fiddle+leaf+fig&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjO3J6Cj9TsAhXRjp4KHdVdAZ4Q_AUoAnoECDcQBA&biw=1237&bih=786)
+- [02_scrape_shutterstock.ipynb](https://github.com/Alex-Robson/PlantPal/blob/master/notebooks/02_scrape_shutterstock.ipynb) - scrape houseplant images from [Shutterstock](https://www.shutterstock.com/search/fiddle+leaf+fig?image_type=photo)
+- [03_scrape_plantnet.ipynb](https://github.com/Alex-Robson/PlantPal/blob/master/notebooks/03_scrape_plantnet.ipynb) - scrape houseplant images from [Pl@ntNet](https://identify.plantnet.org/reunion/species/Ficus%20lyrata%20Warb./data#) (a database of user submitted images)
+- [04_duplicate_image_remove.ipynb](https://github.com/Alex-Robson/PlantPal/blob/master/notebooks/04_duplicate_image_remove.ipynb) - automatically remove duplicate images.    
+     
+Manual filtering out of some iamges is necessary, such as removing cartoons of the plant that may come up in google image results.
 
-# EDA and Training
+## EDA
 
 Notebook 05_EDA.ipynb primarily explores and visualizes the data imbalance in the current dataset
 ![alt text](https://github.com/Alex-Robson/PlantPal/blob/master/data/figures/number_imgs_per_class.png?raw=true)
+
+## Training
 
 06_train_network.ipynb shows examples of the data, their preprocessing/augmentation, and the resulting training.       
          
 Training was done via transfer learning with models such as [Inception Resnet v2](https://www.tensorflow.org/api_docs/python/tf/keras/applications/InceptionResNetV2), [Inception v3](https://www.tensorflow.org/api_docs/python/tf/keras/applications/InceptionV3), [ResNet50](https://www.tensorflow.org/api_docs/python/tf/keras/applications/ResNet50), and [VGG16](https://www.tensorflow.org/api_docs/python/tf/keras/applications/VGG16) starting with the imagenet weights. For the first 20 epochs these were frozen and only a new training block was free to train. After these initial 20 epochs the whole model was unfrozen and the learning rate reduced before another 80 epochs of training.
 
-# Model evaluation
+## Model evaluation
 
 Finally 07_model_evaluation.ipynb compares how the different models metrics (validation accuracy and top 5 accuracy) vary throughout training, as well as exploring the confusion matrix and other useful information for model evaluation.     
 ![alt text](https://github.com/Alex-Robson/PlantPal/blob/master/figures/comparison.png?raw=true)
